@@ -93,7 +93,10 @@ bool Player_class::has_shunzi(Card_list l_s)
             return false;
     }
     
+
+    return true;
 }
+
 
 
 

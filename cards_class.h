@@ -14,15 +14,16 @@ extern vector<uint16_t> player_handcards[4], player_fulu[4];
 
 
 struct card_example
-    {
-        uint16_t    id;
-        string      color;
-        uint16_t    color_id;
-        uint16_t    num;
+{
+    uint16_t    id;
+    string      color;
+    uint16_t    color_id;
+    uint16_t    num;
 
-        string      card_str;
-        string      card_name;
-    };
+    
+    string      card_str; // 英文牌名
+    string      card_name; // 中文牌名
+};
     
 
 class Cards_class
@@ -36,14 +37,19 @@ public:
     Cards_class(/* args */);
     ~Cards_class();
 
+    // 138张牌
     card_example card[137];
+
+    // 138张牌的索引序列，表示牌序
     vector <uint16_t> cards_order = vector<uint16_t>(137);
 
     uint16_t shuffle();
     void drawcard();
     void sort_playercards();
     
+    // 开牌的序数
     uint16_t chang_startnum;
+    // 当前的牌序数
     uint16_t chang_nownum;
 
     void show_order(string, string);

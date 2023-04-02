@@ -11,14 +11,15 @@ int main()
     while(true)
     {
     cards.shuffle();
-    cards.show_order("zh","off");
-    cards.drawcard();
+    cards.show_order("en","off"); //显示牌谱
+    cards.drawcard(); //四家初始抓牌
 
     cards.show_order("zh","off");
-    cards.sort_playercards();
+    cards.sort_playercards(); //四家理牌
     cards.show_playercards(4);
 
 
+    // 凭空抓13张牌，测试用
     Card_list cardlist;
     for(int i=0; i<13; i++)
     {

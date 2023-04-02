@@ -93,7 +93,7 @@ void Cards_class::card_init()
 
 uint16_t Cards_class::shuffle()
 {
-
+    cout << "洗牌：" << endl;
     random_shuffle(&cards_order[1],&cards_order[1] + 136);
     int touzi = rand()%6 + 1 + rand()%6 + 1;
     chang_startnum = (touzi + 1) * 2 + 1;
@@ -101,6 +101,10 @@ uint16_t Cards_class::shuffle()
     cout << "骰子："<< touzi <<"，宝牌指示牌："<< card[cards_order[1]].card_name <<endl;
     return chang_startnum;
 }
+
+/**
+ * @brief 四家抓牌
+*/
 void Cards_class::drawcard()
 {
     for(int player=0; player<4; player++)
@@ -116,6 +120,10 @@ void Cards_class::drawcard()
         }
     }
 }
+
+/**
+ * @brief 四家理牌
+*/
 void Cards_class::sort_playercards()
 {
     for(int player=0; player<4; player++) //对每个player查看手牌
@@ -124,8 +132,15 @@ void Cards_class::sort_playercards()
     }
 }
 
+/**
+ * @brief 显示全局牌谱
+ * @param[in] lang “en”显示英文牌谱，“zh”显示中文牌谱
+ * @param[in] index “on”“off” 是否显示索引/牌序号
+*/
 void Cards_class::show_order(string lang="en",string index="off")
 {
+    cout << endl <<"显示牌谱："<< endl;
+
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_GREEN);
     for(int order=1; order<=136; order++)
     {
@@ -145,7 +160,8 @@ void Cards_class::show_order(string lang="en",string index="off")
         if(index == "on")
             cout << endl ;
     }
-    cout << "现在是第" << chang_nownum << "张。" << endl;
+    cout << "现在是第" << chang_nownum << "张。" << endl ;
+    cout << endl ;
 }
 void Cards_class::show_playercards(int player_id=4)
 {
@@ -206,6 +222,10 @@ void Card_list::Card_list_init(vector<card_example> __list = vector<card_example
 {
     list = __list;
 }
+
+/**
+ * @brief 显示当前牌列（中文）
+*/
 void Card_list::show_list()
 {
     cout << "Show list:" << endl;
