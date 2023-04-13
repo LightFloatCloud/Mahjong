@@ -1,6 +1,7 @@
 #include "cards_class.h"
 #include "player.h"
 
+#include <unistd.h>
 
 
 using namespace std;
@@ -34,8 +35,9 @@ int main()
     Player_class PlayerA("cyx");
     PlayerA.cards_hand = cardlist;
     cout << "Player " << PlayerA.name << (PlayerA.has_quetou(PlayerA.cards_hand)?" has":" doesn\'t have") << " quetou.\n";
-    system("pause");
-    system("CLS");
+    cin.get();
+    //pause();
+    //system("CLS");
     }
     return 0;
 }
