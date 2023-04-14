@@ -14,7 +14,7 @@ int main()
     cards.show_order("en","off"); //显示牌谱
     cards.drawcard(); //四家初始抓牌
 
-    cards.show_order("zh","off");
+    cards.show_order("en","off");
     cards.sort_playercards(); //四家理牌
     cards.show_playercards(4);
 
