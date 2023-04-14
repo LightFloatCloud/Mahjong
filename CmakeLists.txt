@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.10)
+
+project(Mahjong)
+
+include_directories(include)
+
+add_executable(mahjong src/main.cpp src/player.cpp src/cards_class)
+

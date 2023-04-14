@@ -213,11 +213,6 @@ Cards_class::~Cards_class()
 
 
 
-
-
-
-
-
 void Card_list::Card_list_init(vector<card_example> __list = vector<card_example>(0))
 {
     list = __list;
