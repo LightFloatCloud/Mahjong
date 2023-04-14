@@ -2,7 +2,13 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Mahjong)
 
-include_directories(include)
+# 添加后缀 编译为调试模式 优化模式 输出警告模式
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall")
 
-add_executable(mahjong src/main.cpp src/player.cpp src/cards_class)
+include_directories(${CMAKE_SOURCE_DIR}/include)
+## add_library
+
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+
+add_executable(${PROJECT_NAME} src/main.cpp src/player.cpp src/cards_class)
 
