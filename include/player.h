@@ -76,7 +76,7 @@ public:
     bool check_hu();
     bool check_ting();
 
-    restart();
+    void restart();
 
 
     //action_play();
