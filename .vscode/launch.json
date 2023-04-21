@@ -4,14 +4,14 @@
             "name": "C/C++: g++.exe 生成和调试活动文件",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/Mahjong.exe",
+            "program": "${workspaceFolder}/bin/Mahjong",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\mingw64\\bin\\gdb.exe",
+            //"miDebuggerPath": "C:\\mingw64\\bin\\gdb.exe",
             "setupCommands": [
                 {
                     "description": "为 gdb 启用整齐打印",
@@ -23,7 +23,7 @@
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
                 }
-            ],
+            ]
             //"preLaunchTask": "C/C++: g++.exe 生成活动文件"
         }
     ],

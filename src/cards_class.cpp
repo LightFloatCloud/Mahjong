@@ -4,7 +4,7 @@
 #include <ctime> 
 
 #include "cards_class.h"
-#include <windows.h>
+//#include <windows.h>
 
 //using std::random_shuffle; 
 
@@ -141,14 +141,15 @@ void Cards_class::show_order(string lang="en",string index="off")
 {
     cout << endl <<"显示牌谱："<< endl;
 
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_GREEN);
+    //SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_GREEN);
+    printf("\033[92m");
     for(int order=1; order<=136; order++)
     {
         uint16_t id = cards_order[order];
         
         if(order == chang_nownum)
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-
+            //SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+            printf("\033[0m");
         if(index == "on")
             cout << order << ":\t" ;
 
