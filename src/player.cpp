@@ -9,7 +9,7 @@ bool Player_class::is_kezi(Card_list card3)
     {
         return false;
     }
-    if(card3.list[0].card_str == card3.list[1].card_str && card3.list[0].card_str == card3.list[2].card_str)
+    if(card3.list[0].code() == card3.list[1].code() && card3.list[0].code() == card3.list[2].code())
     {
         return true;
     }
@@ -24,35 +24,35 @@ bool Player_class::is_shunzi(Card_list card3)
     }
     card3.sorted();
 
-    uint16_t color = card3.list[0].color_id;
+    Color color = card3.list[0].color_id;
     uint16_t first_num = card3.list[0].num;
     for(auto ptr = card3.list.begin(); ptr != card3.list.end(); ptr++) //花色不一样则为假
     {
-        if(color != 4)
+        if(color != Zi)
         {
             if((*ptr).color_id != color)
                 return false;
         }
         else if(first_num <= 4)
         {
-            if(is_wind((*ptr)) == false)
+            if((*ptr).is_wind() == false)
                 return false;
         }
         else if(first_num <= 7)
         {
-            if(is_zhong((*ptr)) == false)
+            if((*ptr).is_zhong() == false)
                 return false;
         }
     }
 
-    if(color !=4) //判断顺子形状
+    if(color != Zi) //判断顺子形状
     {
         if(card3.list[0].num == (card3.list[1].num - 1) && card3.list[0].num == (card3.list[2].num - 2))
             return true;
         else
             return false;
     }
-    else
+    else //是字的话，不同就是顺子
     {
         if(card3.list[0].num != card3.list[1].num && card3.list[0].num != card3.list[2].num && card3.list[2].num != card3.list[1].num)
             return true;
@@ -62,16 +62,13 @@ bool Player_class::is_shunzi(Card_list card3)
     
 }
 
-bool Player_class::has_quetou(Card_list l_q) //有待修改
+bool Player_class::has_quetou() //有待修改
 {
-    l_q.sorted();
-    for(auto card_iter = l_q.list.begin(); card_iter != l_q.list.end(); card_iter++)
+    cards_hand.sorted();
+    for(auto card_iter = cards_hand.list.begin(); card_iter != cards_hand.list.end(); card_iter++)
     {
-        if((*card_iter).card_str == (*(card_iter + 1)).card_str)
+        if((*card_iter).code() == (*(card_iter + 1)).code())
         {
-            l_q.remove((*card_iter).card_str);
-            l_q.remove((*card_iter).card_str);
-            //////////////////
             return true;
         }
     }
@@ -99,13 +96,28 @@ bool Player_class::has_shunzi(Card_list l_s)
 
 
 
+void Player_class::set_wind(string wind)
+{
+    this->self_wind = wind;
+}
+
+void Player_class::show()
+{
+    cout << name << " -- " ;
+    cards_hand.show_list(); 
+}
 
 
 
 
-
-
-
+void Player_class::restart()
+{
+    cards_public.clear();
+    cards_hand.clear();
+    cards_river.clear();
+    self_wind = "无";
+    ting = false;
+}
 
 
 
@@ -135,4 +147,41 @@ player_class::player_class(string NAME="Player")
 }
 */
 
+//#include <cassert>
+/**
+bool Player_class::is_3N(Card_list card3N)
+{
+    int p = 0;
+    int length = card3N.__len__();
+    assert(length % 3 == 0);
+
+    while (p < length) {
+        string color = card3N.list[p].color();
+        // AA
+        if (card3N.list[p].card_str() == card3N.list[p + 1].card_str()) {
+            // AAA
+            if (card3N.list[p].card_str() == card3N.list[p + 2].card_str()) {
+                p += 3;
+                continue;
+            }
+            // AABBCC
+            else {
+                if (p + 5 >= length) return false;
+                
+                uint16_t num = card3N.list[p].num;
+                if (color == card3N.list[p+2].color() && color == card3N.list[p+3].color() && color == card3N.list[p+4].color() && color == card3N.list[p+5].color() 
+                    && num + 1 == card3N.list[p+2].num && num + 1 == card3N.list[p+3].num && num + 2 == card3N.list[p+4].num && num + 2 == card3N.list[p+5].num ) {
+                        p += 6;
+                        continue;
+                }
+                return false
+            }
+        }
+        // ABC
+        else {
+            if (color == card3N.list[p+2].color() && color == card3N.list[p+3].color())
+        }
+        
+    }
+}*/
 

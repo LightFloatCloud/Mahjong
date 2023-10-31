@@ -1,5 +1,4 @@
-#include "cards_class.h"
-#include "player.h"
+#include "game_class.h"
 
 #include <unistd.h>
 
@@ -7,34 +6,22 @@
 using namespace std;
 int main()
 {
-    Cards_class cards;
+    Game_class game;
 
     while(true)
     {
-    cards.shuffle();
-    cards.show_order("en","off"); //显示牌谱
-    cards.drawcard(); //四家初始抓牌
+    game.shuffle();
+    game.show_order("en","off"); //显示牌谱
+    game.drawcard(); //四家初始抓牌
 
-    cards.show_order("en","off");
-    cards.sort_playercards(); //四家理牌
-    cards.show_playercards(4);
+    game.show_order("en","off");
+    game.sort_playercards(); //四家理牌
+    game.show_playercards(4);
 
 
-    // 凭空抓13张牌，测试用
-    Card_list cardlist;
-    for(int i=0; i<13; i++)
-    {
-        cardlist.append(cards.card[cards.cards_order[cards.chang_nownum + i]]);
-    }
-    cardlist.show_list();
-    cardlist.sorted();
-    cardlist.show_list();
-    cout << "count = " << cardlist.count(cardlist.list[0].card_str) << endl;
-    
-
-    Player_class PlayerA("cyx");
-    PlayerA.cards_hand = cardlist;
-    cout << "Player " << PlayerA.name << (PlayerA.has_quetou(PlayerA.cards_hand)?" has":" doesn\'t have") << " quetou.\n";
+    //Player_class PlayerA("cyx");
+    //PlayerA.cards_hand = cardlist;
+    //cout << "Player " << PlayerA.name << (PlayerA.has_quetou()?" has":" doesn\'t have") << " quetou.\n";
     cin.get();
     //pause();
     //system("CLS");
