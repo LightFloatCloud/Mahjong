@@ -185,14 +185,14 @@ int Card_list::__len__()
     return list.size();
 }
 
-int Card_list::get_index(string cardstr)
+int Card_list::get_index(uint16_t cardcode)
 {
     for(auto card_pointer = list.begin(); card_pointer != list.end(); card_pointer++)
     {
-        if((*card_pointer).card_str() == cardstr)
+        if((*card_pointer).code() == cardcode)
             return card_pointer - list.begin();
     }
-    cout << "Cardlist中无" << cardstr <<endl;
+    cout << "Cardlist中无" << cardcode <<endl;
     return -1;
 }
 int Card_list::get_index(Color color_id, uint16_t num)
@@ -210,9 +210,9 @@ void Card_list::append(card_example newcard)
 {
     list.push_back(newcard);
 }
-void Card_list::remove(string cardstr)
+void Card_list::remove(uint16_t cardcode)
 {
-    list.erase(list.begin() + get_index(cardstr));
+    list.erase(list.begin() + get_index(cardcode));
 }
 void Card_list::remove(Color color_id, uint16_t num)
 {

@@ -22,3 +22,7 @@ add_executable(${PROJECT_NAME}
     src/card_example.cpp
 )
 
+add_executable(${PROJECT_NAME}_test 
+    test_src/main.cpp
+
+)

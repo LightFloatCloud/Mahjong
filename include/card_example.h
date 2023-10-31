@@ -68,13 +68,13 @@ public:
     bool is_contained(Color color_id, uint16_t num); 
     int __len__(); //牌列长度
 
-    int get_index(string); //获取牌列中str的最小索引/id
+    int get_index(uint16_t cardcode); //获取牌列中str的最小索引/id
     int get_index(Color color_id, uint16_t num);
 
 
 
     void append(card_example); //向牌列中添加card
-    void remove(string); //向牌列中删除该str的最小索引card
+    void remove(uint16_t cardcode); //向牌列中删除该str的最小索引card
     void remove(Color color_id, uint16_t num);
     int count(string);
     Card_list sorted(); //排列牌列（？
