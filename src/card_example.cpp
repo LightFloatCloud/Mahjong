@@ -7,7 +7,10 @@
 
 uint16_t card_example::code()
 {
-    return (color_id-1) * 10 + num;
+    if(color_id <= 3) return (color_id) * 10 + num; // x1~x9
+    else if(num <= 4) return (color_id) * 10 + num; // 41~44
+    else return (color_id + 1) * 10 + num; // 55~57
+    return 0;
 }
 
 
@@ -180,7 +183,7 @@ bool Card_list::is_contained(Color color_id, uint16_t num) //是否包含某个�
     return false;
 }
 
-int Card_list::__len__()
+int Card_list::size()
 {
     return list.size();
 }

@@ -66,7 +66,7 @@ public:
     void show_list(); //牌列str显示
     bool is_contained(string); //是否包含某个牌
     bool is_contained(Color color_id, uint16_t num); 
-    int __len__(); //牌列长度
+    int size(); //牌列长度
 
     int get_index(uint16_t cardcode); //获取牌列中str的最小索引/id
     int get_index(Color color_id, uint16_t num);

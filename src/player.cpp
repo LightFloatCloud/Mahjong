@@ -5,7 +5,7 @@
 
 bool Player_class::is_kezi(Card_list card3)
 {
-    if(card3.__len__() != 3)
+    if(card3.size() != 3)
     {
         return false;
     }
@@ -18,7 +18,7 @@ bool Player_class::is_kezi(Card_list card3)
 }
 bool Player_class::is_shunzi(Card_list card3)
 {
-    if(card3.__len__() != 3)
+    if(card3.size() != 3)
     {
         return false;
     }
@@ -77,7 +77,7 @@ bool Player_class::has_quetou() //有待修改
 bool Player_class::has_shunzi(Card_list l_s)
 {
     l_s.sorted();
-    int length = l_s.__len__();
+    int length = l_s.size();
     if(length % 3 != 0)
     {
         return false;
@@ -121,9 +121,53 @@ void Player_class::restart()
 
 
 
+bool Player_class::is_3N(Card_list &card3N)
+{
+    int n = card3N.size();
+    if(n == 0) return true;
+    else if(n % 3 != 0) {
+        cout << "不是3的倍数." <<endl;
+        return false;
+    }
 
+    Card_list temp = card3N;
+    if(temp.list[0].code() == temp.list[1].code() && temp.list[0].code() == temp.list[2].code()) { // 找到刻子则删掉刻子
+        temp.remove(temp.list[0].code());
+        temp.remove(temp.list[0].code());
+        temp.remove(temp.list[0].code());
+        return is_3N(temp);
+    }
+    else { // 找顺子
+        int index1 = temp.get_index(temp.list[0].code() + 1);
+        int index2 = temp.get_index(temp.list[0].code() + 2);
+        if(index1 != -1 && index2 != -1 ) { // 找到顺子
+            temp.remove(temp.list[0].code());
+            temp.remove(temp.list[0].code()+1);
+            temp.remove(temp.list[0].code()+2);
+            return is_3N(temp);
+        }
+        else {
+            return false;
+        }
+    }
+}
 
+bool Player_class::is_3Nplus2(Card_list &card3N_2)
+{
+    card3N_2.sorted();
+    for(int i = 0; i < card3N_2.size() - 1; i++) {
+        Card_list hupaixing = card3N_2;
+        if (hupaixing.list[i].code() == hupaixing.list[i + 1].code()) {
+            hupaixing.remove(hupaixing.list[i].code());
+            hupaixing.remove(hupaixing.list[i].code());
+            if (is_3N(hupaixing)) {
+                return true;
+            }
+        }
+    }
+    return false;
 
+}
 
 
 /*

@@ -33,7 +33,8 @@ private:
     bool is_kezi(Card_list card3);
     bool is_shunzi(Card_list card3);
 
-    bool is_3N(Card_list card3N);
+    bool is_3N(Card_list &card3N);
+
 
 public:
     const string name;
@@ -56,6 +57,11 @@ public:
 
     void set_wind(string); 
     void show();
+
+    bool is_3Nplus2(Card_list &card3N_2);
+
+
+
 
 //    get_face(v);
     bool has_quetou();
