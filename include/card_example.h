@@ -21,7 +21,8 @@ enum Color {
     Wan = 1,
     Tiao = 2,
     Tong = 3,
-    Zi = 4,
+    Feng = 4,
+    Jian = 5,
     Other = 0
 };
 
@@ -29,7 +30,7 @@ enum Color {
 struct card_example
 {
     uint16_t    id;
-    Color    color_id;
+    Color       color_id;
     uint16_t    num;
 
     uint16_t    code();  // 编码标识 1~9 万 11~19 条 21~29 筒 31~34 风 35~37 箭
@@ -39,10 +40,14 @@ struct card_example
     string      card_name(); // 中文牌名
 
 
-    bool is_yaojiu();
-    bool is_zi();
-    bool is_wind();
-    bool is_zhong();
+    bool is_YaoJiu();
+    bool is_Zi();
+    bool is_Feng();
+    bool is_Zhong();
+
+    static string code2str(uint16_t code);
+    static uint16_t str2code(string str);
+    static card_example code2card(uint16_t code);
 
 
 };
@@ -76,7 +81,7 @@ public:
     void append(card_example); //向牌列中添加card
     void remove(uint16_t cardcode); //向牌列中删除该str的最小索引card
     void remove(Color color_id, uint16_t num);
-    int count(string);
+    int count(uint16_t cardcode);
     Card_list sorted(); //排列牌列（？
     void clear(); //清空牌列
     bool is_empty(); 

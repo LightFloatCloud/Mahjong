@@ -33,7 +33,9 @@ private:
     bool is_kezi(Card_list card3);
     bool is_shunzi(Card_list card3);
 
+    Card_list extract_shunzi(Card_list &cards); // 搜索顺子并攫取
     bool is_3N(Card_list &card3N);
+    bool is_3N_Feng(Card_list &card3N);
 
 
 public:

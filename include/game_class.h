@@ -19,7 +19,7 @@ class Game_class
 {
     
 private:
-    void card_init();
+    void card_init();        
 
 public:
     Game_class(/* args */);
@@ -34,10 +34,14 @@ public:
 
     // 4位玩家
     Player_class player[4] = {Player_class("Amy"), Player_class("Bob"), Player_class("Cora"), Player_class("Dell")};
+    int turn = 0; // 0~3 东南西北
 
+    uint16_t shuffle(); // 返回开牌的序数
+    void all_drawcard();
 
-    uint16_t shuffle();
-    void drawcard();
+    uint16_t drawcard(); // 返回抓牌的牌编号
+    void playcard(uint16_t code);
+
     void sort_playercards();
     
     // 开牌的序数

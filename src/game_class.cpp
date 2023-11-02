@@ -7,6 +7,9 @@
 #include <algorithm> 
 #include <ctime> 
 
+//调试代码
+#include <cassert> 
+
 #include "game_class.h"
 
 
@@ -28,7 +31,9 @@ void Game_class::card_init()
     {
         
         card[id].id = id;
-        switch ((id-1)/36 + 1)
+        int color = (id-1)/36 + 1;
+        int num = ((id-1)%36)/4 + 1;
+        switch (color)
         {
         case 1:
             card[id].color_id = Wan;
@@ -40,13 +45,14 @@ void Game_class::card_init()
             card[id].color_id = Tong;
             break;
         case 4:
-            card[id].color_id = Zi;
+            if (num <= 4) card[id].color_id = Feng;
+            else if (num <= 7) card[id].color_id = Jian;
             break;
         default:
             break;
         }
         //card[id].color_id = (id-1)/36 + 1;
-        card[id].num = ((id-1)%36)/4 + 1;
+        card[id].num = num;
     }
     
 }
@@ -63,9 +69,25 @@ uint16_t Game_class::shuffle()
 }
 
 /**
+ * @brief 一家抓牌
+*/
+uint16_t Game_class::drawcard()
+{
+    assert(turn < 4);
+    assert(chang_nownum < 137);
+    assert(cards_order[chang_nownum] < 137 );
+    card_example newcard = card[cards_order[chang_nownum]];
+    player[turn].cards_hand.append(newcard);
+    chang_nownum ++;
+    turn ++;
+    if(turn == 4) turn = 0;
+    return newcard.code();
+}
+
+/**
  * @brief 四家抓牌
 */
-void Game_class::drawcard()
+void Game_class::all_drawcard()
 {
     for(int player_id=0; player_id<4; player_id++)
     {
@@ -78,9 +100,9 @@ void Game_class::drawcard()
     {
         for(int player_id=0; player_id<4; player_id++)
         {
-            player[player_id].cards_hand.append(card[cards_order[chang_nownum]]);
-            //player_handcards[player].append(card[cards_order[chang_nownum]]);
-            chang_nownum ++;
+            drawcard();
+            // player[player_id].cards_hand.append(card[cards_order[chang_nownum]]);
+            // chang_nownum ++;
         }
     }
 }
@@ -145,27 +167,17 @@ void Game_class::show_order(string lang="en",string index="off")
  */
 void Game_class::show_playercards(int player_id=4)
 {
+    assert(player_id < 5);
     if(player_id==4)
     {
         for(int id=0; id<4; id++) //对每个player查看手牌
         {
             player[id].show();
-            //cout << "player" << player << " ";
-            //player_handcards[player].show_list();
-            
-            // for(auto id_pointer=player_handcards[player].begin(); id_pointer!=player_handcards[player].end(); id_pointer++)
-            //     cout << card[*id_pointer].card_name() << "\t"; //id_pointer是vector指针，遍历player所有手牌id
-            // cout << endl;
         }
     }
     else if (player_id<4 && player_id>=0)
     {
         player[player_id].show();
-        // cout << "player" << player_id << " ";
-        // player_handcards[player_id].show_list();
-        // for(auto id_pointer=player_handcards[player_id].begin(); id_pointer!=player_handcards[player_id].end(); id_pointer++)
-        //     cout << card[*id_pointer].card_name() << "\t";
-        // cout << endl;
     }
     
     
@@ -191,7 +203,7 @@ Game_class::Game_class(/* args */)
 
 Game_class::~Game_class()
 {
-    cout << "Cards_class析构函数被调用" << endl;
+    //cout << "Game_class析构函数被调用" << endl;
 }
 
 
