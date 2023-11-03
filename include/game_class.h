@@ -52,6 +52,10 @@ public:
     void show_order(string lang, string index); // 显示牌河
     void show_playercards(int);      // 显示手牌
 
+
+    bool is_over(bool &is_Hu, int turn, string &prompt); // 返回值为是否结束，是否胡，说明内容
+
+
 };
 
 

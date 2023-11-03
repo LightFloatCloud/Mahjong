@@ -185,7 +185,30 @@ void Game_class::show_playercards(int player_id=4)
 
 
 
+bool Game_class::is_over(bool &is_Hu, int turn, string &prompt)
+{
 
+    
+    if(player[turn].is_3Nplus2(player[turn].cards_hand) ) {
+        is_Hu = true;
+        prompt = "胡了！————自摸";
+    }
+    if(player[turn].is_7dui(player[turn].cards_hand) ) {
+        is_Hu = true;
+        prompt = "胡了！————七对";
+    }
+
+    if(is_Hu) {
+        return true;
+    }
+
+    // if(chang_nownum == 137) {
+    //     prompt = "牌局结束，流局。" ;
+    //     return true;
+    // }
+
+    return false;
+}
 
 
 

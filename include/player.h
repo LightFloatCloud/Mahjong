@@ -33,7 +33,7 @@ private:
     bool is_kezi(Card_list card3);
     bool is_shunzi(Card_list card3);
 
-    Card_list extract_shunzi(Card_list &cards); // 搜索顺子并攫取
+    // Card_list extract_shunzi(Card_list &cards); // 搜索顺子并攫取
     bool is_3N(Card_list &card3N);
     bool is_3N_Feng(Card_list &card3N);
 
@@ -61,12 +61,15 @@ public:
     void show();
 
     bool is_3Nplus2(Card_list &card3N_2);
+    bool is_7dui(Card_list &card7dui);
+
+    vector<uint16_t> is_ting(); // 返回听的几张牌
 
 
 
 
 //    get_face(v);
-    bool has_quetou();
+    int  has_quetou(Card_list l_s);  //  几个对子(包括刻子,4个算2对)
     bool has_shunzi(Card_list l_s); //待修改
     bool is_hule(Card_list hand); //待增加
 

@@ -62,17 +62,40 @@ bool Player_class::is_shunzi(Card_list card3)
     
 }
 
-bool Player_class::has_quetou() //有待修改
+int Player_class::has_quetou(Card_list l_s)
 {
-    cards_hand.sorted();
-    for(auto card_iter = cards_hand.list.begin(); card_iter != cards_hand.list.end(); card_iter++)
-    {
-        if((*card_iter).code() == (*(card_iter + 1)).code())
+    l_s.sorted();
+    int res = 0;
+
+    auto card_iter = l_s.list.begin();
+    while(card_iter + 1 < l_s.list.end()) {
+        uint16_t code = (*card_iter).code();
+        if(code == (*(card_iter + 1)).code())
         {
-            return true;
+            res ++;
+            // while (l_s.count(code) > 0) {
+            //     l_s.remove(code);
+            // }
+            l_s.remove(code);
+            l_s.remove(code);
         }
+        else
+        {
+            card_iter++;
+        }
+        
     }
-    return false;
+    return res;
+
+
+    // for(; card_iter != cards_hand.list.end(); card_iter++)
+    // {
+    //     if((*card_iter).code() == (*(card_iter + 1)).code())
+    //     {
+    //         return true;
+    //     }
+    // }
+    // return false;
 }
 bool Player_class::has_shunzi(Card_list l_s)
 {
@@ -132,9 +155,11 @@ bool Player_class::is_3N(Card_list &card3N)
 
     Card_list temp = card3N;
     if(temp.list[0].code() == temp.list[1].code() && temp.list[0].code() == temp.list[2].code()) { // 找到刻子则删掉刻子
-        temp.remove(temp.list[0].code());
-        temp.remove(temp.list[0].code());
-        temp.remove(temp.list[0].code());
+    //cout << "Kezi:remove " << card_example::code2str(temp.list[0].code()) <<endl;
+        uint16_t code = temp.list[0].code();
+        temp.remove(code);
+        temp.remove(code);
+        temp.remove(code);
         return is_3N(temp);
     }
     else { // 找顺子
@@ -144,7 +169,7 @@ bool Player_class::is_3N(Card_list &card3N)
         
         if(index1 != -1 && index2 != -1 ) { // 找到顺子
             uint16_t code = temp.list[0].code();
-        
+        //cout << "Shunzi:remove " << card_example::code2str(code) <<endl;
             temp.remove(code);
             temp.remove(code+1);
             temp.remove(code+2);
@@ -172,9 +197,10 @@ bool Player_class::is_3N_Feng(Card_list &card3N)
         index2 = card3N.get_index(card3N.list[0].code() + 2);
         if(index1 != -1 && index2 != -1 ) { // 找到顺子
             Card_list temp = card3N;
-            temp.remove(temp.list[0].code());
-            temp.remove(temp.list[0].code()+1);
-            temp.remove(temp.list[0].code()+2);
+            uint16_t code = temp.list[0].code();
+            temp.remove(code);
+            temp.remove(code+1);
+            temp.remove(code+2);
             if (is_3N_Feng(temp)) return true;
         }
         // 找到顺子也可以继续尝试其他组合
@@ -182,16 +208,18 @@ bool Player_class::is_3N_Feng(Card_list &card3N)
             int index3 = card3N.get_index(card3N.list[0].code() + 3);
             if(index1 != -1 && index3 != -1 ) { // 找到顺子
                 Card_list temp = card3N;
-                temp.remove(temp.list[0].code());
-                temp.remove(temp.list[0].code()+1);
-                temp.remove(temp.list[0].code()+3);
+                uint16_t code = temp.list[0].code();
+                temp.remove(code);
+                temp.remove(code+1);
+                temp.remove(code+3);
                 if (is_3N_Feng(temp)) return true;
             }
             if(index2 != -1 && index3 != -1 ) { // 找到顺子
                 Card_list temp = card3N;
-                temp.remove(temp.list[0].code());
-                temp.remove(temp.list[0].code()+2);
-                temp.remove(temp.list[0].code()+3);
+                uint16_t code = temp.list[0].code();
+                temp.remove(code);
+                temp.remove(code+2);
+                temp.remove(code+3);
                 if (is_3N_Feng(temp)) return true;
             }
         }
@@ -199,9 +227,10 @@ bool Player_class::is_3N_Feng(Card_list &card3N)
 
     if(card3N.list[0].code() == card3N.list[1].code() && card3N.list[0].code() == card3N.list[2].code()) { // 找到刻子则删掉刻子
         Card_list temp = card3N;
-        temp.remove(temp.list[0].code());
-        temp.remove(temp.list[0].code());
-        temp.remove(temp.list[0].code());
+        uint16_t code = temp.list[0].code();
+        temp.remove(code);
+        temp.remove(code);
+        temp.remove(code);
         if (is_3N_Feng(temp)) return true;
     }
 
@@ -259,6 +288,49 @@ bool Player_class::is_3Nplus2(Card_list &card3N_2)
 }
 
 
+bool Player_class::is_7dui(Card_list &card7dui)
+{
+    card7dui.sorted();
+    int numofdui = has_quetou(card7dui);
+    if(numofdui == 7) {
+        return true;
+    }
+    else {
+        return false;
+    }
+    return false;
+}
+
+
+vector<uint16_t> Player_class::is_ting()
+{
+    vector<uint16_t> ting_codes;
+
+
+    for(uint16_t code = 11; code <= 57; code++) {
+        if(code % 10 == 0) {
+            continue;
+        }else if (code >=45 && code <= 54)
+        {
+            code = 55;
+        }
+//cout << "now " << card_example::code2str(code) <<endl;
+        Card_list try_list = cards_hand;
+        try_list.append(card_example::code2card(code));
+        if(is_3Nplus2(try_list)  || is_7dui(try_list)) {
+            ting_codes.push_back(code);
+        }
+        
+    }
+
+    return ting_codes;
+
+
+
+}
+
+
+
 /*
 player_class::player_class(string NAME="Player")
 {
@@ -279,42 +351,4 @@ player_class::player_class(string NAME="Player")
 
 }
 */
-
-//#include <cassert>
-/**
-bool Player_class::is_3N(Card_list card3N)
-{
-    int p = 0;
-    int length = card3N.__len__();
-    assert(length % 3 == 0);
-
-    while (p < length) {
-        string color = card3N.list[p].color();
-        // AA
-        if (card3N.list[p].card_str() == card3N.list[p + 1].card_str()) {
-            // AAA
-            if (card3N.list[p].card_str() == card3N.list[p + 2].card_str()) {
-                p += 3;
-                continue;
-            }
-            // AABBCC
-            else {
-                if (p + 5 >= length) return false;
-                
-                uint16_t num = card3N.list[p].num;
-                if (color == card3N.list[p+2].color() && color == card3N.list[p+3].color() && color == card3N.list[p+4].color() && color == card3N.list[p+5].color() 
-                    && num + 1 == card3N.list[p+2].num && num + 1 == card3N.list[p+3].num && num + 2 == card3N.list[p+4].num && num + 2 == card3N.list[p+5].num ) {
-                        p += 6;
-                        continue;
-                }
-                return false
-            }
-        }
-        // ABC
-        else {
-            if (color == card3N.list[p+2].color() && color == card3N.list[p+3].color())
-        }
-        
-    }
-}*/
 
