@@ -234,13 +234,31 @@ card_example card_example::code2card(uint16_t code)
 
 
 /**
- * @brief 显示当前牌列（中文）
+ * @brief 显示当前牌列（中文）显示颜色
 */
 void Card_list::show_list()
 {
     cout << "Show list:" << endl;
     for(auto card_pointer = list.begin(); card_pointer != list.end(); card_pointer++)
+    {
+        if((*card_pointer).color_id == Wan) {
+            cout << "\033[31m" ;  // 红色
+        }
+        else if((*card_pointer).color_id == Tiao) {
+            cout << "\033[32m" ;  // 绿色
+        }
+        else if((*card_pointer).color_id == Tong) {
+            cout << "\033[34m" ;  // 蓝色
+        }
+        else if((*card_pointer).color_id == Feng) {
+            //cout << "\033[34m" ;  // 白色
+        }
+        else if((*card_pointer).color_id == Jian) {
+            cout << "\033[33m" ;  // 黄色
+        }
         cout << (*card_pointer).card_name() << "\t";
+        cout << "\033[0m" ;
+    }
     cout << endl;
 }
 
@@ -293,11 +311,13 @@ void Card_list::append(card_example newcard)
 {
     list.push_back(newcard);
 }
-void Card_list::remove(uint16_t cardcode)
+card_example Card_list::remove(uint16_t cardcode)
 {
     int index = get_index(cardcode);
     assert(index >= 0);
+    card_example card = *(list.begin() + index);
     list.erase(list.begin() + index);
+    return card;
 }
 void Card_list::remove(Color color_id, uint16_t num)
 {

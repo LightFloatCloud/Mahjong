@@ -79,8 +79,7 @@ uint16_t Game_class::drawcard()
     card_example newcard = card[cards_order[chang_nownum]];
     player[turn].cards_hand.append(newcard);
     chang_nownum ++;
-    turn ++;
-    if(turn == 4) turn = 0;
+
     return newcard.code();
 }
 
@@ -101,6 +100,8 @@ void Game_class::all_drawcard()
         for(int player_id=0; player_id<4; player_id++)
         {
             drawcard();
+            turn ++;
+            if(turn == 4) turn = 0;
             // player[player_id].cards_hand.append(card[cards_order[chang_nownum]]);
             // chang_nownum ++;
         }
@@ -135,7 +136,7 @@ void Game_class::show_order(string lang="en",string index="off")
 
     //SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_GREEN);
     //
-    printf("\033[92m");
+    printf("\033[92m"); // 翠绿
 
 
     for(int order=1; order<=136; order++)
@@ -185,7 +186,7 @@ void Game_class::show_playercards(int player_id=4)
 
 
 
-bool Game_class::is_over(bool &is_Hu, int turn, string &prompt)
+bool Game_class::is_over(bool &is_Hu, string &prompt)
 {
 
     

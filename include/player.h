@@ -31,7 +31,7 @@ class Player_class
 {
 private:
     bool is_kezi(Card_list card3);
-    bool is_shunzi(Card_list card3);
+    bool is_shunzi(Card_list card3); // 需要修改
 
     // Card_list extract_shunzi(Card_list &cards); // 搜索顺子并攫取
     bool is_3N(Card_list &card3N);
@@ -40,7 +40,7 @@ private:
 
 public:
     const string name;
-    Card_list cards_public; //副露
+    vector<Card_list> cards_public; //副露
     Card_list cards_hand; //手牌
     Card_list cards_river; // 牌河
     string self_wind = "";
@@ -70,11 +70,23 @@ public:
 
 //    get_face(v);
     int  has_quetou(Card_list l_s);  //  几个对子(包括刻子,4个算2对)
-    bool has_shunzi(Card_list l_s); //待修改
-    bool is_hule(Card_list hand); //待增加
+    bool has_shunzi(Card_list l_s); //待修改(无作用)
+    //bool is_hule(Card_list hand); //待增加
 
     //Card_list get_public(Card_list publiccard);
-      
+    
+    uint8_t can_chi(uint16_t card_code); // 1左吃，2中吃，4右吃
+    bool can_peng(uint16_t card_code);
+    bool can_gang(uint16_t card_code);
+    bool can_hu(uint16_t card_code);
+
+    void chi(card_example card, uint8_t mode); // 以哪种模式吃
+    void peng(card_example card);
+    void gang(card_example card);  //...
+    void hu(card_example card);  //...
+
+    void action();
+
 
     // card_example play();
     // bool hu(card_example newcard);

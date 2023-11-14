@@ -16,7 +16,7 @@ bool Player_class::is_kezi(Card_list card3)
     else
         return false;
 }
-bool Player_class::is_shunzi(Card_list card3)
+bool Player_class::is_shunzi(Card_list card3) // 需要修改
 {
     if(card3.size() != 3)
     {
@@ -73,49 +73,18 @@ int Player_class::has_quetou(Card_list l_s)
         if(code == (*(card_iter + 1)).code())
         {
             res ++;
-            // while (l_s.count(code) > 0) {
-            //     l_s.remove(code);
-            // }
-            l_s.remove(code);
-            l_s.remove(code);
+            card_iter += 2;
         }
         else
         {
-            card_iter++;
+            card_iter ++;
         }
         
     }
     return res;
-
-
-    // for(; card_iter != cards_hand.list.end(); card_iter++)
-    // {
-    //     if((*card_iter).code() == (*(card_iter + 1)).code())
-    //     {
-    //         return true;
-    //     }
-    // }
-    // return false;
 }
-bool Player_class::has_shunzi(Card_list l_s)
-{
-    l_s.sorted();
-    int length = l_s.size();
-    if(length % 3 != 0)
-    {
-        return false;
-    }
-    if(length == 3)
-    {
-        if(is_kezi(l_s) || is_shunzi(l_s))
-            return true;
-        else
-            return false;
-    }
-    
 
-    return true;
-}
+
 
 
 
@@ -131,11 +100,10 @@ void Player_class::show()
 }
 
 
-
-
 void Player_class::restart()
 {
     cards_public.clear();
+
     cards_hand.clear();
     cards_river.clear();
     self_wind = "无";
@@ -287,10 +255,8 @@ bool Player_class::is_3Nplus2(Card_list &card3N_2)
 
 }
 
-
 bool Player_class::is_7dui(Card_list &card7dui)
 {
-    card7dui.sorted();
     int numofdui = has_quetou(card7dui);
     if(numofdui == 7) {
         return true;
@@ -327,6 +293,109 @@ vector<uint16_t> Player_class::is_ting()
 
 
 
+}
+
+
+uint8_t Player_class::can_chi(uint16_t card_code)
+{
+    int count_fore_1 = 0;
+    int count_fore_2 = 0;
+    int count_post_1 = 0;
+    int count_post_2 = 0;
+    for(auto card_pointer = cards_hand.list.begin(); card_pointer != cards_hand.list.end(); card_pointer++)
+    {
+        if(card_code == (*card_pointer).code() - 2) count_fore_2 ++;
+        else if(card_code == (*card_pointer).code() - 1) count_fore_1 ++;
+        else if(card_code == (*card_pointer).code() + 1) count_post_1 ++;
+        else if(card_code == (*card_pointer).code() + 2) count_post_2 ++;
+    }
+
+    uint8_t res = 0x00;
+    if(count_fore_1 > 0 && count_post_1 > 0) res |= 0x02;
+    if(count_fore_1 > 0 && count_fore_2 > 0) res |= 0x01;
+    if(count_post_1 > 0 && count_post_2 > 0) res |= 0x04;
+
+    return res;
+}
+
+bool Player_class::can_peng(uint16_t card_code)
+{
+    if (cards_hand.count(card_code) >= 2) {
+        return true;
+    }
+    return false;
+}
+
+bool Player_class::can_gang(uint16_t card_code)
+{
+    if (cards_hand.count(card_code) >= 3) {
+        return true;
+    }
+    return false;
+}
+
+bool Player_class::can_hu(uint16_t card_code)
+{
+    Card_list temp = cards_hand;
+    temp.append(card_example::code2card(card_code));
+    if(is_3Nplus2(temp)  || is_7dui(temp)) {
+        return true;
+    }
+    return false;
+}
+
+
+void Player_class::chi(card_example card, uint8_t mode)
+{
+    uint16_t card_code = card.code();
+    
+    card_example card1, card2;
+
+    if(mode == 0x00) return;
+    else if(mode == 0x01) {
+        card1 = cards_hand.remove(card_code - 2);
+        card2 = cards_hand.remove(card_code - 1);
+    }
+    else if(mode == 0x02) {
+        card1 = cards_hand.remove(card_code - 1);
+        card2 = cards_hand.remove(card_code + 1);
+    }
+    else if(mode == 0x04) {
+        card1 = cards_hand.remove(card_code + 1);
+        card2 = cards_hand.remove(card_code + 2);
+    }
+    else {
+        cerr << "Err in Player_class::chi()\n";
+    }
+    
+    Card_list cards3;
+    cards3.append(card);
+    cards3.append(card1);
+    cards3.append(card2);
+
+    cards_public.push_back(cards3);
+}
+
+void Player_class::peng(card_example card)
+{
+    uint16_t card_code = card.code();
+    card_example card1, card2;
+    card1 = cards_hand.remove(card_code);
+    card2 = cards_hand.remove(card_code);
+
+    Card_list cards3;
+    cards3.append(card);
+    cards3.append(card1);
+    cards3.append(card2);
+
+    cards_public.push_back(cards3);
+}
+
+
+
+void Player_class::action()
+{
+    
 }
 
 

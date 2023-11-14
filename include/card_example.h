@@ -79,7 +79,7 @@ public:
 
 
     void append(card_example); //向牌列中添加card
-    void remove(uint16_t cardcode); //向牌列中删除该str的最小索引card
+    card_example remove(uint16_t cardcode); //向牌列中删除该str的最小索引card
     void remove(Color color_id, uint16_t num);
     int count(uint16_t cardcode);
     Card_list sorted(); //排列牌列（？

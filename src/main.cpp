@@ -6,14 +6,14 @@
 
 #include <unistd.h>
 #include <limits>
-
+#include <cassert>
 
 
 using namespace std;
 
 
 
-int cosplay(Game_class &game,int &turn,uint16_t &play_code);
+int cosplay(Game_class &game, uint16_t &play_code);
 
 
 int main()
@@ -66,59 +66,97 @@ int main()
 
 
 
-
+    cin.get();
 
     //string input; //input == "q" || input == "Q"
     while(1 )
     {
-        int turn = game.turn;
+        if(game.turn == 1)
+            system("cls");
         
 
-        uint16_t newcard_code = game.drawcard();
-        uint16_t play_code = newcard_code;
-
-        game.show_playercards(4);
-        
-        bool is_over = false;
-        bool is_Hu = false; 
-        string prompt;
-        is_over = game.is_over(is_Hu, turn, prompt);
-        if(is_Hu) {
-            cout << prompt <<endl;
-            break;
-        }
-
-        if(cosplay(game, turn, play_code) != 0) {
-            return -1;
-        }; //用户扮演某个player
-        
-        game.player[turn].cards_hand.remove(play_code);
-        game.player[turn].cards_hand.sorted();
-
-        vector<uint16_t> ting_codes = game.player[turn].is_ting();
+        // 听牌显示
+        vector<uint16_t> ting_codes = game.player[game.turn].is_ting();
         if(!ting_codes.empty()) {
             cout << "\t听牌：" ;
             for(auto code:ting_codes) {
                 cout << card_example::code2str(code) << " ";
             }
         }
+
+        // 摸牌
+        
+        uint16_t newcard_code = game.drawcard();
+        uint16_t play_code = newcard_code; // AI 默认出牌
+        //int action_code = 0; // AI 不吃不碰不杠不胡
+
+        game.show_playercards(4);
+        
+        // 判胡
+        bool is_over = false;
+        bool is_Hu = false; 
+        string prompt;
+        is_over = game.is_over(is_Hu, prompt);
+        if(is_Hu) {
+            cout << prompt <<endl;
+            break;
+        }
+
+
+        // 玩家决定出牌
+        int user_answer;
+        do { 
+            user_answer = cosplay(game, play_code) ;
+        }while (user_answer == -2);
+        if(user_answer == -1) { // 退出
+            break;
+        }
+
+        // if(cosplay(game, turn, play_code) != 0) {
+        //     break;
+        // }; //用户扮演某个player
+
+
+        // 打牌
+        int index = game.player[game.turn].cards_hand.get_index(play_code);
+        assert(index >= 0);
+        card_example card_play = game.player[game.turn].cards_hand.list[index];
+        game.player[game.turn].cards_hand.list.erase(game.player[game.turn].cards_hand.list.begin() + index);
         
 
+        // 轮询吃碰杠胡
+
+
+        
+        game.player[game.turn].cards_river.append(card_play);
+        //game.player[turn].cards_hand.remove(play_code);
+        game.player[game.turn].cards_hand.sorted();
+
+        
+        
+        // 流局
         if(game.chang_nownum == 137) {
             cout << "牌局结束" << endl;
             break;
         }
 
+        // 下一轮
+        game.turn ++;
+        if(game.turn == 4) game.turn = 0;
+        
+
         cout << endl;
     }
+
+    cin.get();
     return 0;
 }
 
 
-int cosplay(Game_class &game,int &turn,uint16_t &play_code)
+int cosplay(Game_class &game, uint16_t &play_code)
 {
     string input;
-    if(turn == 0) {
+    if(game.turn == 0) {
         std::cout << "还有" << 137 - game.chang_nownum << "张牌, ";
         std::cout << "请输入str(q/Q退出): ";
         std::cin >> input;  
@@ -129,14 +167,14 @@ int cosplay(Game_class &game,int &turn,uint16_t &play_code)
             cout << "退出！" << endl;
             return -1;
         }
-        system("cls");
+        // system("cls");
         play_code = card_example::str2code(input);
 
     }
-    int count = game.player[turn].cards_hand.count(play_code);
+    int count = game.player[game.turn].cards_hand.count(play_code);
     if(count == 0) {
-        cout << "要打的牌不存在" <<endl;
-        return -1;
+        cout << "要打的牌不存在, 重新输入" <<endl;
+        return -2;
     }
     return 0;
 }
