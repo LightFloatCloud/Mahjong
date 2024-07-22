@@ -47,14 +47,14 @@ void show_vector(vector<int> &card3N)
 
 bool is_3N_Feng(vector<int> &card3N)
 {
-    int n = card3N.size();
+    size_t n = card3N.size();
     if(n == 0) return true;
     else if(n % 3 != 0) {
         cout << "不是3的倍数." <<endl;
         return false;
     }
 
-    int  index1, index2;
+    size_t  index1, index2;
     if(card3N[0] <= 2) { // 找顺子
         index1 = find(card3N.begin(), card3N.end(), card3N[0] + 1) - card3N.begin();
         index2 = find(card3N.begin(), card3N.end(), card3N[0] + 2) - card3N.begin();
