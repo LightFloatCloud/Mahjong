@@ -33,7 +33,7 @@ public:
 
 
     // 4位玩家
-    Player_class player[4] = {Player_class("Amy"), Player_class("Bob"), Player_class("Cora"), Player_class("Dell")};
+    Player_class player[4] = {Player_class("You"), Player_class("Bob"), Player_class("Cora"), Player_class("Dell")};
     int turn = 0; // 0~3 东南西北
 
     uint16_t shuffle(); // 返回开牌的序数
@@ -52,6 +52,11 @@ public:
     void show_order(string lang, string index); // 显示牌河
     void show_playercards(int);      // 显示手牌
 
+
+
+    int enquire_hu(card_example &enquire_card); // 查看余下三家有没有胡的, 并执行，返回1<<winner.turn(可一炮双响)
+    int enquire_peng(card_example &enquire_card); // 返回值是 penger.turn + 1, 0 表示无
+    bool enquire_chi(card_example &enquire_card);
 
     bool is_over(bool &is_Hu, string &prompt); // 返回值为是否结束，是否胡，说明内容
 

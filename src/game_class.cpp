@@ -185,7 +185,104 @@ void Game_class::show_playercards(int player_id=4)
 }
 
 
+// 初步
+int Game_class::enquire_hu(card_example &enquire_card)
+{
+    int res = 0;
+    uint16_t enquire_code = enquire_card.code();
 
+// 轮询
+    int can_hu = 0; // 0~3位表示turn 0~3的情况
+    int turn_i = (turn + 1) % 4;
+    while(turn_i != turn)
+    {
+        if(player[turn_i].can_hu(enquire_code)) {
+            can_hu |= 1 << turn_i; 
+
+            if (player[turn_i].default_dicide_hu == true) {  // 今后需要修改
+                res |= 1 << turn_i;
+            }
+
+        }
+        turn_i = (turn_i + 1) % 4;
+    }
+
+// 结算
+    if(res != 0) {
+        res = can_hu;
+        int hu_turn = (turn + 1) % 4;
+        while(hu_turn != turn)
+        {
+            if(res & (1<<hu_turn)) {
+                // player[turn_i].hu(enquire_card); 程序还没写
+            }
+            
+            hu_turn = (hu_turn + 1) % 4;
+        }
+    }
+
+    return res;
+
+}
+
+int Game_class::enquire_peng(card_example &enquire_card)
+{
+    int res = 0; // 1~4
+    uint16_t enquire_code = enquire_card.code();
+
+// 轮询
+    int turn_i = (turn + 1) % 4;
+    while(turn_i != turn)
+    {
+        if(player[turn_i].can_peng(enquire_code)) { // 有碰的能力
+            if (player[turn_i].default_dicide_peng == true) {  // 今后需要修改
+                res = turn_i + 1;
+            }
+            break;
+        }
+        turn_i = (turn_i + 1) % 4;
+    }
+
+    
+// 结算
+    if(res != 0) {
+        player[res-1].peng(enquire_card);
+    }
+
+    return res;
+}
+
+bool Game_class::enquire_chi(card_example &enquire_card)
+{
+    bool  res = false; 
+    uint16_t enquire_code = enquire_card.code();
+
+// 不轮询
+    int turn_i = (turn + 1) % 4;
+    if(player[turn_i].can_chi(enquire_code)) { // 有吃的能力
+        if (player[turn_i].default_dicide_chi ) {  // 今后需要修改
+            uint8_t mode = player[turn_i].default_dicide_chi & (- player[turn_i].default_dicide_chi);
+            
+            // 结算
+            player[turn_i].chi(enquire_card, mode);
+
+            res = true;
+        }
+    }
+
+
+    return res;
+}
+
+
+/**
+ * @brief 游戏是否结束 待修改
+ * 
+ * @param is_Hu 返回一个值，有人胡牌了吗
+ * @param prompt 结束提示
+ * @return true 有人胡了
+ * @return false 没人胡
+ */
 bool Game_class::is_over(bool &is_Hu, string &prompt)
 {
 

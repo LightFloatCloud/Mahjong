@@ -345,7 +345,7 @@ bool Player_class::can_hu(uint16_t card_code)
 }
 
 
-void Player_class::chi(card_example card, uint8_t mode)
+void Player_class::chi(card_example &card, uint8_t mode)
 {
     uint16_t card_code = card.code();
     
@@ -374,9 +374,11 @@ void Player_class::chi(card_example card, uint8_t mode)
     cards3.append(card2);
 
     cards_public.push_back(cards3);
+
+    just_chipenged = true;
 }
 
-void Player_class::peng(card_example card)
+void Player_class::peng(card_example &card)
 {
     uint16_t card_code = card.code();
     card_example card1, card2;
@@ -389,13 +391,39 @@ void Player_class::peng(card_example card)
     cards3.append(card2);
 
     cards_public.push_back(cards3);
+
+    just_chipenged = true;
 }
 
-
-
-void Player_class::action()
+void Player_class::gang(card_example &card)
 {
-    
+    uint16_t card_code = card.code();
+    card_example card1, card2, card3;
+    card1 = cards_hand.remove(card_code);
+    card2 = cards_hand.remove(card_code);
+    card3 = cards_hand.remove(card_code);
+
+    Card_list cards3;
+    cards3.append(card);
+    cards3.append(card1);
+    cards3.append(card2);
+    cards3.append(card3);
+
+    cards_public.push_back(cards3);
+
+    just_chipenged = true;
+    just_ganged = true;
+}
+
+/**
+ * @brief 输入是牌，检测自己是否能吃碰杠胡，并执行相应的判断，再更新轮次
+ * 
+ */
+void Player_class::action(card_example &card)
+{
+    uint16_t request_code = card.code();
+    int decide = 0; // 0 = 不作为，1 = 左吃， 2 = 中吃， 3 = 右吃，4 = 碰， 5 = 杠， 6 = 胡
+    // 优先级 胡 轮询 -> 碰杠 轮询 -> 吃 轮询
 }
 
 

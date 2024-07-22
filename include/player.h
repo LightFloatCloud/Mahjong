@@ -46,6 +46,17 @@ public:
     string self_wind = "";
     //string table_wind = "东";
     bool ting = false;
+
+
+// 吃碰杠操作
+    bool just_ganged = false;
+    bool just_chipenged = false;
+    bool hule = false;
+// 机器人策略
+    bool default_dicide_hu = true;
+    bool default_dicide_gang = false;
+    bool default_dicide_peng = false;
+    uint8_t default_dicide_chi = 0x00; 
     //bool riichi_flag = false;
     //riichi_list = []
     //ting_item = ''
@@ -80,12 +91,12 @@ public:
     bool can_gang(uint16_t card_code);
     bool can_hu(uint16_t card_code);
 
-    void chi(card_example card, uint8_t mode); // 以哪种模式吃
-    void peng(card_example card);
-    void gang(card_example card);  //...
-    void hu(card_example card);  //...
+    void chi(card_example &card, uint8_t mode); // 以哪种模式吃
+    void peng(card_example &card);
+    void gang(card_example &card); 
+    void hu(card_example &card);  //...
 
-    void action();
+    void action(card_example &card);
 
 
     // card_example play();
