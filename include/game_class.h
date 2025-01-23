@@ -5,8 +5,44 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <functional>
 
 #include "player.h"
+
+// 游戏状态枚举
+enum class GameState {
+    INIT,          // 初始化
+    SHUFFLE,       // 洗牌
+    DEAL,          // 发牌
+    PLAYER_TURN,   // 玩家回合
+    ENQUIRE_ACTION,// 询问其他玩家动作
+    GAME_OVER      // 游戏结束
+};
+
+// 状态机类
+class GameStateMachine {
+private:
+    GameState currentState;
+    std::function<void()> onStateChange;
+
+public:
+    GameStateMachine() : currentState(GameState::INIT) {}
+
+    void setState(GameState newState) {
+        currentState = newState;
+        if(onStateChange) {
+            onStateChange();
+        }
+    }
+
+    GameState getState() const {
+        return currentState;
+    }
+
+    void setOnStateChangeCallback(std::function<void()> callback) {
+        onStateChange = callback;
+    }
+};
 
 
 //extern Card_list player_handcards[4], player_fulu[4];
@@ -20,6 +56,35 @@ class Game_class
     
 private:
     void card_init();        
+    GameStateMachine stateMachine;
+
+    // 靠多层递归、自动完成INIT~DEAL的功能
+    void handleStateChange() { 
+        switch(stateMachine.getState()) {
+            case GameState::INIT:
+                card_init();
+                stateMachine.setState(GameState::SHUFFLE);
+                break;
+            case GameState::SHUFFLE:
+                shuffle();
+                stateMachine.setState(GameState::DEAL);
+                break;
+            case GameState::DEAL:
+                all_drawcard();
+                sort_playercards();
+                stateMachine.setState(GameState::PLAYER_TURN);
+                break;
+            case GameState::PLAYER_TURN:
+                // 玩家回合逻辑
+                break;
+            case GameState::ENQUIRE_ACTION:
+                // 询问其他玩家动作
+                break;
+            case GameState::GAME_OVER:
+                // 游戏结束处理
+                break;
+        }
+    }
 
 public:
     Game_class(/* args */);
@@ -60,7 +125,13 @@ public:
 
     bool is_over(bool &is_Hu, string &prompt); // 返回值为是否结束，是否胡，说明内容
 
+    GameState getState() const {
+        return stateMachine.getState();
+    }
 
+    void setState(GameState newState) {
+        stateMachine.setState(newState);
+    }
 };
 
 

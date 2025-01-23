@@ -12,6 +12,18 @@
 
 #include "game_class.h"
 
+Game_class::Game_class(/* args */) {
+
+    // 初始化随机种子
+    srand(time(NULL));
+
+    // 设置状态机回调
+    stateMachine.setOnStateChangeCallback([this]() {
+        this->handleStateChange();
+    });
+    stateMachine.setState(GameState::INIT);
+}
+
 
 //using std::random_shuffle; 
 
@@ -22,7 +34,7 @@
 
 void Game_class::card_init()
 {
-    
+    cout << "初始化：" << endl;
     card[0].id = 0;
     card[0].color_id = Other;
     card[0].num = 0;
@@ -53,6 +65,11 @@ void Game_class::card_init()
         }
         //card[id].color_id = (id-1)/36 + 1;
         card[id].num = num;
+    }
+
+    // 初始化牌序
+    for(uint16_t order=1; order<=136; order++) {
+        cards_order[order] = order;
     }
     
 }
@@ -136,7 +153,7 @@ void Game_class::show_order(string lang="en",string index="off")
 
     //SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_GREEN);
     //
-    printf("\033[92m"); // 翠绿
+    cout << "\033[92m"; // 翠绿
 
 
     for(int order=1; order<=136; order++)
@@ -144,8 +161,7 @@ void Game_class::show_order(string lang="en",string index="off")
         uint16_t id = cards_order[order];
         
         if(order == chang_nownum)
-            //SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY|FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-            printf("\033[0m");
+            cout << "\033[0m"; // 恢复默认颜色
         if(index == "on")
             cout << order << ":\t" ;
 
@@ -310,22 +326,8 @@ bool Game_class::is_over(bool &is_Hu, string &prompt)
 
 
 
-Game_class::Game_class(/* args */)
-{
-    card_init();
-    
-    for(uint16_t order=1; order<=136; order++)
-    {
-        cards_order[order] = order;
-    }
-
-    srand(time(NULL));
-}
 
 Game_class::~Game_class()
 {
     //cout << "Game_class析构函数被调用" << endl;
 }
-
-
-
