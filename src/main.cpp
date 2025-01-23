@@ -38,6 +38,7 @@ int main()
                     for(auto code:ting_codes) {
                         cout << card_example::code2str(code) << " ";
                     }
+                    cout << endl;
                 }
 
                 // 摸牌
@@ -50,7 +51,7 @@ int main()
                 bool is_over = false;
                 bool is_Hu = false; 
                 string prompt;
-                is_over = game.is_over(is_Hu, prompt);
+                is_over = game.is_over(is_Hu, prompt); // 这里会自动整理手牌
                 if(is_Hu) {
                     cout << prompt <<endl;
                     game.setState(GameState::GAME_OVER);
@@ -134,6 +135,7 @@ int cosplay(Game_class &game, uint16_t &play_code)
     } else {
         // AI 默认出牌
         play_code = game.player[game.turn].cards_hand.list.front().code();
+        cout << "AI 默认出牌：" << card_example::code2str(play_code) << endl;
     }
     return 0;
 }
